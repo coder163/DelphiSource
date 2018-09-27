@@ -1,0 +1,29 @@
+program ProjectDemo1;
+
+{$APPTYPE CONSOLE}
+
+{$R *.res}
+
+uses
+  System.SysUtils;
+{
+   1、为什么要定义类型
+        为了更加合理、科学的使用计算机存储空间
+
+   2、有那些类型
+      1)数值型
+          整数
+          小数(实数)
+      2)逻辑型
+          真(true) 非0为真、假(false) 0
+      3)指针类型
+
+      4)数组、子界、集合、自定义类型(结构体、类)
+
+
+}
+
+
+begin
+
+end.

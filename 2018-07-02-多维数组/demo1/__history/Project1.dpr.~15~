@@ -1,0 +1,28 @@
+program Project1;
+
+{$APPTYPE CONSOLE}
+
+{$R *.res}
+
+uses
+    System.SysUtils;
+
+    {声明一个动态的二维数组}
+type
+    TStringDynamicArray = array of array of string;
+
+    {声明一个静态的二维数组}
+type
+    TStringStaticArray = array[0..3] of array[0..2] of string;
+
+var
+    StaticNameArray: TStringStaticArray;
+
+begin
+    StaticNameArray := [['你好', '中国', '萧蔷'], ['张三丰', '成龙', '吴京']];
+
+    Writeln(StaticNameArray[0][2]);
+
+    Readln;
+end.
+

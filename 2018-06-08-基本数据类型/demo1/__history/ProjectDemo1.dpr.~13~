@@ -1,0 +1,19 @@
+program ProjectDemo1;
+
+{$APPTYPE CONSOLE}
+
+{$R *.res}
+
+uses
+  System.SysUtils;
+{
+   1、为什么要定义类型
+        为了更加合理、科学的使用计算机存储空间
+
+   2、有那些类型
+}
+
+
+begin
+
+end.

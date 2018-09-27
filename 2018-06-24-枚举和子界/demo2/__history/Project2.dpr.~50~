@@ -1,0 +1,67 @@
+﻿program Project2;
+
+{$APPTYPE CONSOLE}
+
+{$R *.res}
+
+uses
+    System.SysUtils;
+ {
+
+  为什么使用：为了防止出现越界
+
+
+  注意事项
+    1)子界要求上界和下界必须是有序的数据类型  整数、字符、枚举
+    2)子界的上界大于或者等于下界
+ }
+ {定义格式}
+
+type
+    {枚举:季节}
+    ESeason = (SPRING, SUMMER, AUTUMN, WINTER);
+    {子界:12个月}
+
+    TSubBoundMonths = 1..12;
+{
+  打印输出闰年还是平年,每个月份的天数和所属季节
+  //年份能被4整除； 2、年份若是100的整数倍的话，需被400整除
+}
+
+var
+    Season: ESeason;
+    Months: TSubBoundMonths;
+    Year: Integer;
+    {如果是闰年为true，平年为false}
+    IsLeapYear: Boolean;
+
+begin
+    Writeln('请输入一个年份：');
+    Readln(Year);
+        Writeln('请输入一个月份：');
+    Readln(Year);
+        Readln(Year);
+    //  默认为平年
+    IsLeapYear := False;
+    if Year mod 4 = 0 then begin
+        if (Year mod 100 = 0) then begin
+            if Year mod 400 = 0 then begin
+                Writeln(Year, '年是闰年');
+                IsLeapYear := True;
+            end;
+        end
+        else begin
+            IsLeapYear := True;
+            Writeln(Year, '年是闰年');
+        end;
+
+    end;
+
+    //搞季节
+    if(Low(Months))
+
+
+    Readln;
+
+end.
+

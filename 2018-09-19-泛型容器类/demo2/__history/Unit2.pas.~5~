@@ -1,0 +1,18 @@
+unit Unit2;
+
+interface
+
+type
+  TStudent = class
+  private
+    FName: string;
+  public
+    property Name: string read FName write FName;
+    //构造方法
+    constructor Create; overload;
+  end;
+
+implementation
+
+end.
+

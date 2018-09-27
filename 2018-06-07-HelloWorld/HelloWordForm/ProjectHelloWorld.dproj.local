@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>2018/06/07 22:24:48.000.753,=E:\Delphi教程录制\DelphiWorkspce\Unit1.pas</Transaction>
+    <Transaction>2018/06/07 22:31:39.000.456,E:\Delphi教程录制\DelphiWorkspce\Unit1.pas=E:\Delphi教程录制\DelphiWorkspce\HelloWordForm\Unit1Form.pas</Transaction>
+    <Transaction>2018/06/07 22:31:39.000.456,E:\Delphi教程录制\DelphiWorkspce\Unit1.dfm=E:\Delphi教程录制\DelphiWorkspce\HelloWordForm\Unit1Form.dfm</Transaction>
+    <Transaction>2018/06/07 22:32:34.000.561,E:\Delphi教程录制\DelphiWorkspce\Project1.dproj=E:\Delphi教程录制\DelphiWorkspce\HelloWordForm\ProjectHelloWorld.dproj</Transaction>
+  </Transactions>
+</BorlandProject>

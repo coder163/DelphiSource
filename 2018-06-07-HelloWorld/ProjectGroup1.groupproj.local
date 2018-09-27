@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+  <Transactions>
+    <Transaction>2018/06/07 22:45:54.635,E:\Delphi教程录制\DelphiWorkspce\HelloWordForm\ProjectGroup1.groupproj=E:\Delphi教程录制\DelphiWorkspce\ProjectGroup1.groupproj</Transaction>
+    <Transaction>2018/06/07 22:46:31.545,E:\Delphi教程录制\DelphiWorkspce\ProjectGroup1.groupproj=E:\Delphi教程录制\DelphiWorkspce\HelloWordForm\ProjectGroup1.groupproj</Transaction>
+  </Transactions>
+  <Default.Personality>
+    <Projects ActiveProject="E:\Delphi教程录制\DelphiWorkspce\HelloWordForm\ProjectHelloWorld.dproj"/>
+  </Default.Personality>
+</BorlandProject>

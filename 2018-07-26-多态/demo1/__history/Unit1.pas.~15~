@@ -1,0 +1,46 @@
+unit Unit1;
+
+interface
+
+type
+    IColor = interface
+    end;
+
+    TAimal = class(TInterfacedObject)
+    public
+        procedure Run(); virtual; abstract;
+    end;
+
+    TDog = class(TAimal, IColor)
+    public
+        procedure Run(); override;
+        procedure LookDoor();
+    end;
+
+    TCat = class(TAimal)
+        procedure Run(); override;
+    end;
+
+implementation
+
+{ TDog }
+
+procedure TDog.LookDoor;
+begin
+
+end;
+
+procedure TDog.Run;
+begin
+    Writeln('π∑‘⁄≈‹');
+end;
+
+{ TCat }
+
+procedure TCat.Run;
+begin
+    Writeln('√®‘⁄≈‹');
+end;
+
+end.
+

@@ -1,0 +1,23 @@
+unit Unit1;
+
+interface
+
+type
+    IColor = interface
+    end;
+
+    TAimal = class(TInterfacedObject)
+
+    public
+        procedure Run();virtual;abstract;
+    end;
+
+    TDog = class(TAimal, IColor)
+
+
+    end;
+
+implementation
+
+end.
+

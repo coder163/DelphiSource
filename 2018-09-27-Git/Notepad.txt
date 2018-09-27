@@ -1,0 +1,36 @@
+
+版本控制
+	版本控制是指对软件开发过程中各种程序代码、配置文件及说明文档等文件变更的管理
+
+常用的工具
+	CVS(淘汰)、SVN(主流)、Git(流行)
+
+管理平台
+	国际
+
+		GitHub(微软收购)：全世界的代码共享基地
+
+	国内
+		coding.net(码市)、oschina(码云)
+下载
+	https://git-scm.com/downloads
+
+工作流程
+	源代码文件-->初始化仓库-->加入到暂存区-->从暂存区提交到本地仓库-->推送到远程仓库
+
+常用命令	
+	1、初始化仓库  git init
+	2、加入到暂存区 git add 文件名
+	    2.1 查询暂存区的信息	git status
+
+	3、从暂存区提交到本地仓库 git commit -m'本次提交的说明内容'
+		3.1 在提交之前需要设置提交人的信息
+			git config --global user.email "you@example.com"
+			git config --global user.name "Your Name"
+远程操作
+	1、下载远程仓库
+		git clone 地址
+	2、推送
+		git push 
+	3、拉取
+		git pull

@@ -1,0 +1,46 @@
+unit uExtends;
+
+interface
+
+type
+    {定义一个类}
+    TAnimal = class
+    private
+        FTiZhong: Integer;
+    public
+        {定义一个构造方法}
+        constructor Create(FTiZhong: Integer);
+
+        {定义属性}
+        property TiZhong: Integer read FTiZhong write FTiZhong;
+    end;
+
+    {定义一个派生类}
+    TDog = class(TAnimal)
+    public
+        constructor Create();
+    end;
+
+implementation
+
+
+
+
+{ TAnimal }
+
+constructor TAnimal.Create(FTiZhong: Integer);
+begin
+    Self.FTiZhong := FTiZhong;
+end;
+
+{ TDog }
+
+constructor TDog.Create;
+begin
+    Writeln('狗类');
+    //直接调用父类 方法
+    inherited Create(1001);
+end;
+
+end.
+

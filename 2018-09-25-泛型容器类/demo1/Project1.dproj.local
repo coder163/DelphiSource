@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>2018/07/06 23:12:23.000.883,=E:\Delphi教程录制\DelphiWorkspce\Unit1.pas</Transaction>
+    <Transaction>2018/09/25 19:23:00.000.837,=E:\Delphi教程录制\DelphiWorkspce\Unit1.pas</Transaction>
+    <Transaction>2018/09/25 19:28:12.000.748,E:\Delphi教程录制\DelphiWorkspce\Unit1.dfm=E:\Delphi教程录制\DelphiWorkspce\2018-09-25-泛型容器类\demo1\Unit1.dfm</Transaction>
+    <Transaction>2018/09/25 19:28:12.000.748,E:\Delphi教程录制\DelphiWorkspce\Unit1.pas=E:\Delphi教程录制\DelphiWorkspce\2018-09-25-泛型容器类\demo1\Unit1.pas</Transaction>
+    <Transaction>2018/09/25 19:28:29.000.740,E:\Delphi教程录制\DelphiWorkspce\Project1.dproj=E:\Delphi教程录制\DelphiWorkspce\2018-09-25-泛型容器类\demo1\Project1.dproj</Transaction>
+    <Transaction>2018/09/25 19:40:07.000.741,=E:\Delphi教程录制\DelphiWorkspce\2018-09-25-泛型容器类\demo1\Unit2.pas</Transaction>
+    <Transaction>2018/09/25 19:53:40.000.145,=E:\Delphi教程录制\DelphiWorkspce\2018-09-25-泛型容器类\demo1\Unit3.pas</Transaction>
+    <Transaction>2018/09/25 19:54:18.000.964,E:\Delphi教程录制\DelphiWorkspce\2018-09-25-泛型容器类\demo1\Unit3.dfm=E:\Delphi教程录制\DelphiWorkspce\2018-09-25-泛型容器类\demo1\AddForm.dfm</Transaction>
+    <Transaction>2018/09/25 19:54:18.000.964,E:\Delphi教程录制\DelphiWorkspce\2018-09-25-泛型容器类\demo1\Unit3.pas=E:\Delphi教程录制\DelphiWorkspce\2018-09-25-泛型容器类\demo1\AddForm.pas</Transaction>
+    <Transaction>2018/09/25 19:56:42.000.699,E:\Delphi教程录制\DelphiWorkspce\2018-09-25-泛型容器类\demo1\AddForm.pas=E:\Delphi教程录制\DelphiWorkspce\2018-09-25-泛型容器类\demo1\AddFormUnit.pas</Transaction>
+    <Transaction>2018/09/25 19:56:42.000.699,E:\Delphi教程录制\DelphiWorkspce\2018-09-25-泛型容器类\demo1\AddForm.dfm=E:\Delphi教程录制\DelphiWorkspce\2018-09-25-泛型容器类\demo1\AddFormUnit.dfm</Transaction>
+    <Transaction>2018/09/25 20:16:00.463,=E:\Delphi教程录制\DelphiWorkspce\2018-09-25-泛型容器类\demo1\Unit3.pas</Transaction>
+    <Transaction>2018/09/25 20:16:22.324,E:\Delphi教程录制\DelphiWorkspce\2018-09-25-泛型容器类\demo1\DaoUnit.pas=E:\Delphi教程录制\DelphiWorkspce\2018-09-25-泛型容器类\demo1\Unit3.pas</Transaction>
+  </Transactions>
+</BorlandProject>

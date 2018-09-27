@@ -1,0 +1,50 @@
+unit uTools;
+
+interface
+ {声明区域}
+
+uses
+    Unit1;
+
+type
+    TPerson = class
+        {字段、域}
+    private
+        FName: string;
+        FAge: Integer;
+        //声明一个函数,用于获取字段的值
+        function GetAge(): Integer;
+        procedure SetAge(FAge: Integer);
+    public
+        {属性:property}
+        property Name: string read FName write FName;
+        {该属性是一个只读属性}
+        property Age: Integer read GetAge write SetAge;
+    end;
+
+implementation
+  {实现区域}
+
+{ TPerson }
+
+function TPerson.GetAge: Integer;
+begin
+
+    Result := Self.FAge;
+end;
+
+procedure TPerson.SetAge(FAge: Integer);
+begin
+    Self.FAge := FAge;
+end;
+
+initialization
+ {初始化区域}
+
+
+
+finalization
+ {销毁区域}
+
+end.
+

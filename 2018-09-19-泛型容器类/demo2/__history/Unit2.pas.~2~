@@ -1,0 +1,13 @@
+unit Unit2;
+
+interface
+
+type
+  TStudent = class
+
+  end;
+
+implementation
+
+end.
+

@@ -1,0 +1,87 @@
+program Project1;
+
+{$APPTYPE CONSOLE}
+
+{$R *.res}
+{*------------------------------------------------------------------------------
+
+ 派生(继承)：
+        派生指类和类之间的关系，继承更多的是指对象和对象之间的关系
+
+ 特点
+        1、提高代码的复用  TForm
+
+        2、一旦产生派生关系之后，他们就具备了多态的特性
+
+        3、Delphi中是单继承，但是可以是多层继承
+
+ 继承中的构造方法
+        1、定义
+
+ 继承中的访问权限
+
+
+
+
+-------------------------------------------------------------------------------}
+uses
+    System.SysUtils;
+
+type
+    {定义一个类}
+    TAnimal = class
+    private
+        FTiZhong: Integer;
+    public
+        {定义一个构造方法}
+        constructor Create();
+
+        {定义属性}
+        property TiZhong: Integer read FTiZhong write FTiZhong;
+    end;
+
+    {定义一个派生类}
+    TDog = class(TAnimal)
+    public
+        constructor Create();
+    end;
+
+    {定义一个派生类}
+    TCat = class(TAnimal)
+    public
+        constructor Create();
+    end;
+
+{ TAnimal }
+constructor TAnimal.Create;
+begin
+    {类字段的初始化}
+    Writeln('动物类');
+end;
+
+{ TDog }
+
+constructor TDog.Create;
+begin
+    Writeln('狗类');
+end;
+
+{ TCat }
+
+constructor TCat.Create;
+begin
+    Writeln('猫类');
+end;
+
+var
+    Dog: TDog;
+
+begin
+
+    Dog := TDog.Create();
+    Dog.TiZhong := 100;
+
+    Writeln(Dog.TiZhong);
+    Readln;
+end.
+

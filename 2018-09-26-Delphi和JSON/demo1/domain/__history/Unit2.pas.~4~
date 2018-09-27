@@ -1,0 +1,26 @@
+unit Unit2;
+
+interface
+
+type
+  TStudent = class
+  private
+    FName: string;
+    FAge: Integer;
+  public
+    property Name: string read FName write FName;
+    property Age: Integer read FAge write FAge;
+    constructor Create; overload;
+  end;
+
+implementation
+
+{ TStudent }
+
+constructor TStudent.Create;
+begin
+
+end;
+
+end.
+

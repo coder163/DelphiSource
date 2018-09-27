@@ -1,0 +1,37 @@
+unit uThreads;
+
+interface
+
+uses
+  System.Classes;
+
+type
+  TWork = class(TThread)
+  private
+    { Private declarations }
+  protected
+    procedure Execute; override;
+  public
+    procedure Operation;
+  end;
+
+implementation
+
+{ TWork }
+
+procedure TWork.Execute;
+begin
+end;
+
+procedure TWork.Operation;
+var
+  Num: Integer;
+begin
+  for Num := 1 to 10000000 do begin
+    Form1.Label1.Caption := Num.ToString;
+    //œﬂ≥Ã–›√ﬂ100∫¡√Î
+    TThread.Sleep(100);
+  end;
+end;
+
+end.

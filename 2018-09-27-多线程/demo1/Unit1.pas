@@ -1,0 +1,116 @@
+unit Unit1;
+
+interface
+
+uses
+  uThreads, Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
+  System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls;
+
+type
+  TForm1 = class(TForm)
+    Button1: TButton;
+    Label1: TLabel;
+    Button2: TButton;
+    GroupBox1: TGroupBox;
+    Label2: TLabel;
+    btnStart: TButton;
+    btnSuspend: TButton;
+    btnContinue: TButton;
+    btnStop: TButton;
+    procedure Button1Click(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+    procedure btnStartClick(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure btnSuspendClick(Sender: TObject);
+    procedure btnContinueClick(Sender: TObject);
+    procedure btnStopClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Form1: TForm1;
+
+var
+  WorkThread: TWork;
+
+implementation
+
+{$R *.dfm}
+procedure Work();
+var
+  Num: Integer;
+begin
+  for Num := 1 to 10000000 do begin
+    Form1.Label1.Caption := Num.ToString;
+    //线程休眠100毫秒
+    TThread.Sleep(100);
+  end;
+end;
+
+procedure TForm1.btnContinueClick(Sender: TObject);
+begin
+  WorkThread.Suspended := False;
+end;
+
+procedure TForm1.btnStartClick(Sender: TObject);
+begin
+  //True:表示线程创建完对象后是立即执行还是先挂起
+  try
+    WorkThread.Start;
+  except
+    on E: Exception do
+      ShowMessage('启动失败');
+  end;
+
+end;
+
+procedure TForm1.btnStopClick(Sender: TObject);
+begin
+   WorkThread.FreeOnTerminate  := True;
+
+//  try
+//    TerminateThread(WorkThread.Handle, 0);
+//  except
+//    on E: Exception do
+//      ShowMessage('终止失败');
+//  end;
+
+end;
+
+procedure TForm1.btnSuspendClick(Sender: TObject);
+begin
+  WorkThread.Suspended := True;
+end;
+
+procedure TForm1.Button1Click(Sender: TObject);
+begin
+  //匿名线程
+  //TThread.CreateAnonymousThread(Work).Start;
+  TThread.CreateAnonymousThread(
+    procedure
+    var
+      Num: Integer;
+    begin
+      for Num := 1 to 10000000 do begin
+        Form1.Label1.Caption := Num.ToString;
+        //线程休眠100毫秒
+        TThread.Sleep(100);
+      end;
+    end).Start;
+end;
+
+procedure TForm1.Button2Click(Sender: TObject);
+begin
+  label1.Caption := '0';
+end;
+
+procedure TForm1.FormCreate(Sender: TObject);
+begin
+  WorkThread := TWork.Create(True);
+end;
+
+end.
+

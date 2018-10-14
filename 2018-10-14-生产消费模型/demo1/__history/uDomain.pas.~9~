@@ -1,0 +1,21 @@
+unit uDomain;
+
+interface
+
+type
+  //产品类
+  TProduct = class
+  private
+    //产品编号
+    FId: Integer;
+    //产品名称
+    FName: string;
+  public
+    property Id: Integer read FId write FId;
+    property Name: string read FName write FName;
+  end;
+
+implementation
+
+end.
+

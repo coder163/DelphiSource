@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+  <Transactions>
+    <Transaction>2018/09/30 21:19:35.866,=E:\Delphi教程录制\DelphiSource\Unit1.pas</Transaction>
+    <Transaction>2018/09/30 21:20:12.279,E:\Delphi教程录制\DelphiSource\2018-09-30-线程安全\demo1\Unit1.pas=E:\Delphi教程录制\DelphiSource\Unit1.pas</Transaction>
+    <Transaction>2018/09/30 21:20:12.279,E:\Delphi教程录制\DelphiSource\2018-09-30-线程安全\demo1\Unit1.dfm=E:\Delphi教程录制\DelphiSource\Unit1.dfm</Transaction>
+    <Transaction>2018/09/30 21:20:13.655,E:\Delphi教程录制\DelphiSource\2018-09-30-线程安全\demo1\Project1.dproj=E:\Delphi教程录制\DelphiSource\Project1.dproj</Transaction>
+    <Transaction>2018/09/30 21:21:24.407,=E:\Delphi教程录制\DelphiSource\2018-09-30-线程安全\demo1\Unit2.pas</Transaction>
+    <Transaction>2018/09/30 21:22:08.969,E:\Delphi教程录制\DelphiSource\2018-09-30-线程安全\demo1\uSyncThread.pas=E:\Delphi教程录制\DelphiSource\2018-09-30-线程安全\demo1\Unit2.pas</Transaction>
+  </Transactions>
+</BorlandProject>

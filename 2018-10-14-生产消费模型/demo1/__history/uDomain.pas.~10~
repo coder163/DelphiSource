@@ -1,0 +1,25 @@
+unit uDomain;
+
+interface
+
+type
+  //产品类
+  TProduct = class
+  private
+    //产品编号
+    FId: Integer;
+    //产品名称
+    FName: string;
+
+    //产品是否已经被消费
+    FIsConsumption: Boolean;
+  public
+    property Id: Integer read FId write FId;
+    property Name: string read FName write FName;
+    property IsConsumption: string read FIsConsumption write FIsConsumption;
+  end;
+
+implementation
+
+end.
+

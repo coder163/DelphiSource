@@ -1,0 +1,12 @@
+unit uDomain;
+
+interface
+
+type
+  TProduct = class
+  end;
+
+implementation
+
+end.
+

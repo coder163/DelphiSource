@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>2018/10/14 22:00:04.000.114,=E:\Delphi教程录制\DelphiSource\Unit1.pas</Transaction>
+    <Transaction>2018/10/14 22:06:08.607,=E:\Delphi教程录制\DelphiSource\Unit1.pas</Transaction>
+    <Transaction>2018/10/14 22:07:16.221,E:\Delphi教程录制\DelphiSource\2018-10-14-生产消费模型\demo1\Unit1.pas=E:\Delphi教程录制\DelphiSource\Unit1.pas</Transaction>
+    <Transaction>2018/10/14 22:07:16.221,E:\Delphi教程录制\DelphiSource\2018-10-14-生产消费模型\demo1\Unit1.dfm=E:\Delphi教程录制\DelphiSource\Unit1.dfm</Transaction>
+    <Transaction>2018/10/14 22:07:17.987,E:\Delphi教程录制\DelphiSource\2018-10-14-生产消费模型\demo1\Project1.dproj=E:\Delphi教程录制\DelphiSource\Project1.dproj</Transaction>
+    <Transaction>2018/10/14 22:07:35.392,=E:\Delphi教程录制\DelphiSource\2018-10-14-生产消费模型\demo1\Unit2.pas</Transaction>
+    <Transaction>2018/10/14 22:07:59.809,E:\Delphi教程录制\DelphiSource\2018-10-14-生产消费模型\demo1\uThreads.pas=E:\Delphi教程录制\DelphiSource\2018-10-14-生产消费模型\demo1\Unit2.pas</Transaction>
+    <Transaction>2018/10/14 22:11:39.290,=E:\Delphi教程录制\DelphiSource\2018-10-14-生产消费模型\demo1\Unit2.pas</Transaction>
+    <Transaction>2018/10/14 22:12:16.654,=E:\Delphi教程录制\DelphiSource\2018-10-14-生产消费模型\demo1\Unit2.pas</Transaction>
+    <Transaction>2018/10/14 22:12:30.535,E:\Delphi教程录制\DelphiSource\2018-10-14-生产消费模型\demo1\uDomain.pas=E:\Delphi教程录制\DelphiSource\2018-10-14-生产消费模型\demo1\Unit2.pas</Transaction>
+  </Transactions>
+</BorlandProject>

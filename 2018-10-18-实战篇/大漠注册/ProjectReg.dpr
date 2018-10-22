@@ -3,7 +3,8 @@ program ProjectReg;
 uses
   Vcl.Forms,
   MainFrm in 'MainFrm.pas' {Form1},
-  uUtils in 'uUtils.pas';
+  uUtils in 'uUtils.pas',
+  uMainThread in 'uMainThread.pas';
 
 {$R *.res}
 

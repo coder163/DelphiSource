@@ -1,0 +1,58 @@
+unit uMainThread;
+
+interface
+
+uses
+  uUtils, Dm_TLB, System.Classes, Winapi.Windows;
+
+type
+  TWorkThread = class(TThread)
+  private
+    Hand: Integer;
+    Dm: Idmsoft;
+  protected
+    procedure Execute; override;
+  public
+    constructor Create; overload;
+    constructor Create(Hand: Integer); overload;
+  end;
+
+implementation
+
+
+
+{ TWorkThread }
+
+constructor TWorkThread.Create(Hand: Integer);
+begin
+  inherited Create(False);
+  Self.Hand := Hand;
+
+end;
+
+constructor TWorkThread.Create;
+begin
+  inherited Create(False);
+end;
+
+procedure TWorkThread.Execute;
+begin
+
+  Dm := CreateComObjectFromDll(CLASS_dmsoft, LoadLibrary('dm.dll')) as Idmsoft;
+
+  if dm.BindWindow(Self.Hand, 'gdi', 'windows', 'windows', 0) = 0 then begin
+    Exit;
+  end;
+
+   //操作向窗口中发送字符串
+  while True do begin
+    dm.SendString(Self.Hand,PWideChar('我是来测试的'))
+  end;
+
+end;
+
+initialization
+
+
+end.
+

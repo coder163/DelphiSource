@@ -1,0 +1,97 @@
+unit uMainThread;
+
+interface
+
+uses
+  uUtils, Dm_TLB, System.Classes, Winapi.Windows;
+
+type
+  TWorkThread = class(TThread)
+  private
+    Hand: Integer;
+    Dm: Idmsoft;
+  protected
+    procedure Execute; override;
+  public
+    constructor Create; overload;
+    constructor Create(Hand: Integer); overload;
+    //挂机打怪
+    procedure HangUp();
+  end;
+
+implementation
+
+uses
+  MainFrm;
+
+
+{ TWorkThread }
+
+constructor TWorkThread.Create(Hand: Integer);
+begin
+  inherited Create(False);
+  Self.Hand := Hand;
+
+end;
+
+constructor TWorkThread.Create;
+begin
+  inherited Create(False);
+end;
+
+procedure TWorkThread.Execute;
+var
+  OcrStr: string;
+begin
+  FreeOnTerminate := False;
+  Dm := CreateComObjectFromDll(CLASS_dmsoft, LoadLibrary('dm.dll')) as Idmsoft;
+   //设置全局路径
+  dm.SetPath('ziku.txt');
+  if dm.BindWindow(Self.Hand, 'normal', 'normal', 'normal', 0) = 0 then begin
+    Exit;
+  end;
+  Self.Sleep(1000);
+  //挂机
+//  Self.HangUp();
+  OcrStr := dm.Ocr(65,11,216,52, 'ded784-000000', 0.9);
+  Form1.Caption := OcrStr;
+end;
+
+procedure TWorkThread.HangUp;
+begin
+  while True do begin
+     // 选怪
+    Self.Dm.KeyDown(17); //Ctrl
+    Self.Sleep(500);
+    Self.Dm.KeyPress(9); //Tab
+    Self.Sleep(100);
+    Self.Dm.KeyUp(17); //Ctrl
+    Self.Sleep(1000);
+    //判断怪物血量，检查是否是满血
+    if Self.Dm.CmpColor(494, 34, 'ff4e40-000000', 0.9) = 1 then begin
+      Continue;
+    end;
+
+    while True do begin
+      //释放技能,冷却时间判断
+      if Self.Dm.CmpColor(273, 542, '796549-000000', 0.9) = 0 then begin
+        Self.Sleep(500);
+        Self.Dm.KeyPress(113); //Tab
+      end;
+      //判断怪物释放死亡
+      if (Self.Dm.CmpColor(320, 32, 'dd4536-000000', 0.9) = 1) then begin
+        Break;
+      end;
+
+      Self.Sleep(1000);
+    end;
+
+  end;
+
+end;
+
+initialization
+
+
+end.
+

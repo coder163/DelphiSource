@@ -62,8 +62,10 @@ begin
   if dm = nil then
     Exit;
 
+
+
   //枚举窗口，获取窗口句柄
-  Hands := dm.EnumWindow(0, '记事本', '', 1 + 4 + 8 + 16);
+  Hands := dm.EnumWindow(0, '《新天龙八部》', '', 1 + 4 + 8 + 16);
   //分割字符串
   HandArray := Hands.Split([',']);
   if (Length(HandArray) > 1) then
@@ -72,9 +74,9 @@ begin
   for RowIndex := Low(HandArray) to High(HandArray) do begin
 //
     dm.SetWindowState(StrToInt(HandArray[RowIndex]), 12);
-    dm.delay(100);
+    TThread.Sleep(1000);
     //窗口绑定
-    Ret := dm.BindWindow(StrToInt(HandArray[RowIndex]), 'gdi', 'windows', 'windows', 0);
+    Ret := dm.BindWindow(StrToInt(HandArray[RowIndex]), 'normal', 'normal', 'normal', 0);
     if Ret = 0 then begin
       ShowMessage('绑定失败');
       Exit;

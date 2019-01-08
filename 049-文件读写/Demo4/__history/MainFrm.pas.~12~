@@ -1,0 +1,70 @@
+unit MainFrm;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
+  System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ComCtrls;
+
+type
+  TForm1 = class(TForm)
+    Button1: TButton;
+    ProgressBar1: TProgressBar;
+    procedure Button1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Form1: TForm1;
+
+const
+  // 源文件，被复制的文件
+  SOURCE_FILE: string = 'E:\群图标.png';
+
+  // 目标文件，复制出来的文件
+  TARGET_FILE: string = 'E:\copy.png';
+
+  // 所谓无类型文件，就是二进制文件
+implementation
+
+{$R *.dfm}
+
+procedure TForm1.Button1Click(Sender: TObject);
+var
+
+  SourceFile, TargetFile: file;
+var
+  // 缓存：临时存放数据的空间
+  Buf: array [0 .. 255] of Byte;
+
+begin
+  // 关联变量
+  AssignFile(SourceFile, SOURCE_FILE);
+
+  try
+
+    // 设置打开方式
+    Reset(SourceFile);
+    AssignFile(TargetFile, TARGET_FILE);
+    Rewrite(TargetFile);
+
+    // 边读边写
+    while not Eof(SourceFile) do begin
+      // 读取一个字节的数据
+      BlockRead(SourceFile, Buf, 1);
+      BlockWrite(TargetFile, Buf, 1);
+    end;
+
+  finally
+    // 关闭文件
+    CloseFile(SourceFile);
+    CloseFile(TargetFile);
+  end;
+
+end;
+
+end.

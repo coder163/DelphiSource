@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>2018/12/04 21:29:52.000.557,=C:\Users\coderadmin\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2018/12/04 22:01:17.000.240,=C:\Users\coderadmin\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2018/12/04 22:01:56.000.220,C:\Users\coderadmin\Documents\Embarcadero\Studio\Projects\Unit1.dfm=E:\Delphi教程第一季\代码\47-DLL初识\MainProject\MainFrm.dfm</Transaction>
+    <Transaction>2018/12/04 22:01:56.000.220,C:\Users\coderadmin\Documents\Embarcadero\Studio\Projects\Unit1.pas=E:\Delphi教程第一季\代码\47-DLL初识\MainProject\MainFrm.pas</Transaction>
+    <Transaction>2018/12/04 22:02:04.000.522,C:\Users\coderadmin\Documents\Embarcadero\Studio\Projects\Project1.dproj=E:\Delphi教程第一季\代码\47-DLL初识\MainProject\MainProject.dproj</Transaction>
+  </Transactions>
+</BorlandProject>

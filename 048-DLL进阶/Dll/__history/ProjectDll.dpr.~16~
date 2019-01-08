@@ -1,0 +1,51 @@
+library ProjectDll;
+
+uses
+  Winapi.Windows,
+  Vcl.Forms,
+  System.SysUtils,
+  System.Classes;
+
+{$R *.res}
+//重载
+function Add(Num1, Num2: Integer): Integer; overload; stdcall;
+begin
+  Result := Num1 + Num2;
+end;
+
+function Add(Num1, Num2: Double): Double; overload; stdcall;
+begin
+  Result := Num1 + Num2;
+end;
+
+exports
+  Add(Num1, Num2: Integer) name 'add1',
+  Add(Num1, Num2: Double) name 'add2';
+
+procedure ShowMsg(Msg:string);
+begin
+  Application.MessageBox(PWideChar(Msg), PWideChar('温馨提示'), MB_OK);
+end;
+//退出函数
+
+procedure MyExit(Res: Integer);
+begin
+  case Res of
+    DLL_PROCESS_ATTACH:
+      begin
+        ShowMsg('附加，初始化');
+      end;
+    DLL_PROCESS_DETACH:
+      begin
+        ShowMsg('销毁，玻璃进程');
+      end;
+
+  end;
+end;
+
+begin
+  DllProc := @MyExit;
+
+  MyExit();
+end.
+

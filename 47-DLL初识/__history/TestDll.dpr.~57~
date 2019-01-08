@@ -1,0 +1,78 @@
+library TestDll;
+{$S-}
+
+uses
+  Vcl.Forms,
+  Winapi.Windows,
+  System.SysUtils,
+  System.Classes;
+
+{$R *.res}
+
+
+//stdcall参数的传递顺序
+
+function Add(Num1, Num2: Integer): Integer; stdcall;
+begin
+  Result := Num1 + Num2;
+  Exit;
+end;
+
+procedure ShowMessage(Content: string);
+begin
+  MessageBox(0, PWideChar(Content), '', MB_OK);
+end;
+
+function Show: Boolean; stdcall;
+begin
+
+  Application.MessageBox(PChar('Show FormDll'), '信息', 64);
+
+  Result := True;
+
+end;
+
+var
+  OldExitProc: Pointer;
+
+procedure MyExitProc(); far;
+begin
+  Application.MessageBox(PChar('Dll aaaLoading.'), '信息', 64);
+  ExitProc := OldExitProc;
+end;
+
+procedure DllEntryPoint(dwReason: Integer);
+begin
+
+  case dwReason of
+
+    Dll_Process_Attach:
+
+      begin
+
+        Application.MessageBox(PChar('Dll Loading.'), '信息', 64);
+
+      end;
+
+    Dll_Process_Detach:
+      Application.MessageBox(PChar('Dll Unloading.'), '信息', 64);
+
+  end;
+
+end;
+
+exports
+  Show,
+  Add;
+
+begin
+
+//  SysInit.DllProc := @DllEntryPoint;
+//
+//  DllEntryPoint(Dll_Process_Attach);
+  ShowMessage('a');
+  OldExitProc := ExitProc;
+  ExitProc := @MyExitProc;
+
+end.
+

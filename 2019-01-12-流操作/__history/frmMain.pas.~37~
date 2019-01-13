@@ -1,0 +1,134 @@
+unit frmMain;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
+  System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls;
+
+type
+  TForm1 = class(TForm)
+    Button1: TButton;
+    Memo1: TMemo;
+    Button2: TButton;
+    Button3: TButton;
+    Button4: TButton;
+    Button5: TButton;
+    procedure Button1Click(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+    procedure Button3Click(Sender: TObject);
+    procedure Button4Click(Sender: TObject);
+    procedure Button5Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+  // 测试数据
+  TPerson = record
+    Name: string;
+    Age: Integer;
+  end;
+
+var
+  Form1: TForm1;
+
+implementation
+
+{$R *.dfm}
+
+procedure TForm1.Button1Click(Sender: TObject);
+var
+  FileStream: TFileStream;
+
+var
+  Person: TPerson;
+begin
+  try
+    FileStream := TFileStream.Create('E:\Demo\Person.txt', fmCreate);
+    // 构造结构体数据
+    Person.Name := '萧蔷';
+    Person.Age := 20;
+    // 写出数据
+    FileStream.Write(Person, sizeof(Person));
+
+  finally
+
+    FreeAndNil(FileStream);
+  end;
+end;
+
+procedure TForm1.Button2Click(Sender: TObject);
+var
+  FileStream: TFileStream;
+
+var
+  Person: TPerson;
+begin
+  try
+    FileStream := TFileStream.Create('E:\Demo\Person.txt', fmOpenRead);
+    // 设置文件指针的位置
+    FileStream.Position := 0;
+
+    // 无法直接读取结构体
+    // Self.Memo1.Lines.LoadFromFile('E:\Demo\Person.txt');
+    // Self.Memo1.Lines.LoadFromStream(FileStream);
+
+    // 遍历流中的数据(字节)
+    while FileStream.Position < FileStream.Size do begin
+
+      FileStream.Read(Person, sizeof(Person));
+
+      Self.Memo1.Lines.Add(Person.Name + ',' + Person.Age.ToString);
+    end;
+  finally
+    FreeAndNil(FileStream);
+  end;
+end;
+
+procedure TForm1.Button3Click(Sender: TObject);
+var
+  FileStream: TFileStream;
+begin
+  try
+    FileStream := TFileStream.Create('E:\Demo\Memo.txt', fmCreate);
+
+    with Self.Memo1 do begin
+      Lines.Add('Hello');
+      Lines.Add('World');
+      Lines.Add('期待B站粉丝过万');
+    end;
+
+    FileStream.WriteComponent(Self.Memo1);
+
+  finally
+    FreeAndNil(FileStream);
+  end;
+end;
+
+procedure TForm1.Button4Click(Sender: TObject);
+var
+  FileStream: TFileStream;
+begin
+  try
+    FileStream := TFileStream.Create('E:\Demo\Memo.txt', fmOpenRead);
+    FileStream.ReadComponent(Self.Memo1);
+  finally
+    FreeAndNil(FileStream);
+  end;
+
+end;
+
+procedure TForm1.Button5Click(Sender: TObject);
+var
+  FileStream: TFileStream;
+begin
+//  Self.Memo1.Lines.LoadFromFile('E:\Demo\demo.txt');
+  FileStream := TFileStream.Create('E:\Demo\demo.txt', fmOpenRead);
+  Self.Memo1.Lines.LoadFromStream(FileStream);
+  FreeAndNil(FileStream);
+end;
+
+end.

@@ -1,0 +1,79 @@
+unit Unit1;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
+  System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls;
+
+type
+  TForm1 = class(TForm)
+    Button1: TButton;
+    SaveDialog1: TSaveDialog;
+    Edit1: TEdit;
+    Memo1: TMemo;
+    Button2: TButton;
+    OpenDialog1: TOpenDialog;
+    procedure Button1Click(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Form1: TForm1;
+
+implementation
+
+{$R *.dfm}
+
+procedure TForm1.Button1Click(Sender: TObject);
+var
+
+  StreamWrite: TStreamWriter;
+begin
+
+  // 打开对话框
+  Self.SaveDialog1.Execute(Self.Handle);
+  // 打开默认的目录
+  Self.SaveDialog1.DefaultExt := 'E:\';
+  try
+    try
+      // 创建TStreamWriter
+      StreamWrite := TStreamWriter.Create(Self.SaveDialog1.FileName);
+      // 写入数据
+      StreamWrite.WriteLine(Self.Edit1.Text);
+    except
+      on E: Exception do begin
+        Self.Memo1.Lines.Add('加载文件出错！');
+      end;
+    end;
+  finally
+    // 释放资源
+    FreeAndNil(StreamWrite);
+  end;
+
+end;
+
+procedure TForm1.Button2Click(Sender: TObject);
+var
+  Reader: TStreamReader;
+begin
+  try
+    // 执行打开文件对话框
+    Self.OpenDialog1.Execute(Self.Handle);
+    // 获取打开的文件名,构造对象
+    Reader := TStreamReader.Create(Self.OpenDialog1.FileName);
+    // 读取内容 设置memon的内容
+    Self.Memo1.Lines.Add(Reader.ReadLine);
+  finally
+    // 释放资源
+     FreeAndNil(Reader);
+  end;
+
+end;
+
+end.

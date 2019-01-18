@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+  <Transactions>
+    <Transaction>2019/01/18 13:31:13.206,=E:\Delphi教程第一季\代码\Unit1.pas</Transaction>
+    <Transaction>2019/01/18 13:32:57.681,E:\Delphi教程第一季\代码\DelphiSource\2019-01-18-流操作\Demo1\Unit1.dfm=E:\Delphi教程第一季\代码\Unit1.dfm</Transaction>
+    <Transaction>2019/01/18 13:32:57.681,E:\Delphi教程第一季\代码\DelphiSource\2019-01-18-流操作\Demo1\Unit1.pas=E:\Delphi教程第一季\代码\Unit1.pas</Transaction>
+    <Transaction>2019/01/18 13:33:09.166,E:\Delphi教程第一季\代码\DelphiSource\2019-01-18-流操作\Demo1\aaa\Project1.dproj=E:\Delphi教程第一季\代码\Project1.dproj</Transaction>
+    <Transaction>2019/01/18 13:34:35.070,E:\Delphi教程第一季\代码\DelphiSource\2019-01-18-流操作\Demo1\ProjectMain.dproj=E:\Delphi教程第一季\代码\DelphiSource\2019-01-18-流操作\Demo1\aaa\Project1.dproj</Transaction>
+  </Transactions>
+</BorlandProject>

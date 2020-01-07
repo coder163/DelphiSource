@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>2019/11/18 19:03:09.000.859,=D:\delphi-workspace\Unit1.pas</Transaction>
+    <Transaction>2020/01/07 20:12:04.384,=D:\delphi-workspace\Unit1.pas</Transaction>
+    <Transaction>2020/01/07 20:12:44.150,D:\DelphiSource\2020-01-07-Game\MainFrm.dfm=D:\delphi-workspace\Unit1.dfm</Transaction>
+    <Transaction>2020/01/07 20:12:44.150,D:\DelphiSource\2020-01-07-Game\MainFrm.pas=D:\delphi-workspace\Unit1.pas</Transaction>
+    <Transaction>2020/01/07 20:12:53.481,D:\DelphiSource\2020-01-07-Game\Game.dproj=D:\delphi-workspace\Project1.dproj</Transaction>
+  </Transactions>
+</BorlandProject>

@@ -1,0 +1,16 @@
+unit UnitService;
+
+interface
+
+uses
+  Winapi.GDIPOBJ, Winapi.GDIPAPI;
+
+type
+  TGameSevice = class
+    procedure DrawBackground();
+  end;
+
+implementation
+
+end.
+

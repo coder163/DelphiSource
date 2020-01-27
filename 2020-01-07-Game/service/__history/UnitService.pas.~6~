@@ -1,0 +1,22 @@
+unit UnitService;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.GDIPOBJ, Winapi.GDIPAPI;
+
+type
+  TGameSevice = class
+  private
+    FHdc: HDC;
+  public
+    procedure DrawBackground();
+    //构造方法
+    constructor Create(hdc: HDC);
+    property GameHandle: HDC read FHdc write FHdc;
+  end;
+
+implementation
+
+end.
+

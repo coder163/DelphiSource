@@ -5,12 +5,14 @@ interface
 uses
   LoggerPro, Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
   System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
-  Vcl.ComCtrls, Vcl.StdCtrls;
+  Vcl.ComCtrls, Vcl.StdCtrls, Vcl.ExtCtrls;
 
 type
   TForm1 = class(TForm)
     ListView1: TListView;
     Button1: TButton;
+    Image1: TImage;
+    Button2: TButton;
     procedure FormCreate(Sender: TObject);
     procedure Button1Click(Sender: TObject);
     procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
@@ -30,18 +32,27 @@ var
 implementation
 
 uses
-  LoggerPro.VCLListViewAppender;
+  UnitService, LoggerPro.VCLListViewAppender;
 {$R *.dfm}
 
 procedure TForm1.Button1Click(Sender: TObject);
 begin
-  Log.Info('这是一条测试信息', '温馨提示');
+
+  Log.Info('这是一个提示信息', '温馨提示');
+
 end;
+
+//图片绘制测试
 
 procedure TForm1.FormCreate(Sender: TObject);
 begin
   FLog := BuildLogWriter([TVCLListViewAppender.Create(ListView1)]);
+   //绘制背景
+  TGameSevice.Create(Image1.Canvas.Handle).DrawBackground('D:\DelphiSource\2020-01-07-Game\bin\resources\background\bg011.jpg',Image1.Width, Image1.Height);
+
+
 end;
+
 
 //当事件发生时会将键盘的键码值传到函数内
 procedure TForm1.FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);

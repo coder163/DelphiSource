@@ -12,9 +12,11 @@ type
     ListView1: TListView;
     Button1: TButton;
     Image1: TImage;
+    Button2: TButton;
     procedure FormCreate(Sender: TObject);
     procedure Button1Click(Sender: TObject);
     procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure Button2Click(Sender: TObject);
   private
     { Private declarations }
     //定义日志字段
@@ -39,13 +41,15 @@ uses
 procedure TForm1.Button1Click(Sender: TObject);
 begin
 
+
   // 1、TGameService对象创建的问题,注意，原来我们需要传递句柄和展示图片的索引
   //设置句柄
   GameService.GameHandle := Image1.Canvas.Handle;
 
   //绘制背景图
   GameService.DrawBackGround(Image1.Width, Image1.Height);
-
+  GameService.DrawWindow(0, 0, 264, 264);
+  GameService.DrawWindow(300, 0, 264, 264);
   // 2、如何保存num变量的值  ，通过TGameService类中的ImageIndex属性进行保存
   //重绘
   Repaint;
@@ -54,7 +58,17 @@ begin
   GameService.ImageIndex := GameService.ImageIndex + 1;
 end;
 
+
+
+
 //图片绘制测试
+procedure TForm1.Button2Click(Sender: TObject);
+begin
+  //设置句柄
+  GameService.GameHandle := Image1.Canvas.Handle;
+  GameService.DrawWindow(100, 0, 264, 264);
+end;
+
 procedure TForm1.FormCreate(Sender: TObject);
 begin
   FLog := BuildLogWriter([TVCLListViewAppender.Create(ListView1)]);

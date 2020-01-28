@@ -3,7 +3,8 @@ program Game;
 uses
   Vcl.Forms,
   MainFrm in 'MainFrm.pas' {Form1},
-  UnitService in 'service\UnitService.pas';
+  UnitService in 'service\UnitService.pas',
+  UnitConst in 'const\UnitConst.pas';
 
 {$R *.res}
 

@@ -1,0 +1,21 @@
+unit UnitConst;
+
+{*------------------------------------------------------------------------------
+  @author  侯叶飞
+  @version 2020/01/28 1.0 Initial revision.
+  @comment  资源常量列表
+
+-------------------------------------------------------------------------------}
+interface
+
+uses
+  System.SysUtils, Vcl.Forms;
+
+const
+  //游戏背景图片存放路径
+  BACK_GROUND_IMAGE: string = './resources/background';
+
+implementation
+
+end.
+

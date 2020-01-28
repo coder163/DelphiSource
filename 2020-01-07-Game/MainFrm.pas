@@ -3,16 +3,15 @@ unit MainFrm;
 interface
 
 uses
-  LoggerPro, Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
-  System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
-  Vcl.ComCtrls, Vcl.StdCtrls, Vcl.ExtCtrls;
+  UnitService, LoggerPro, Winapi.Windows, Winapi.Messages, System.SysUtils,
+  System.Variants, System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms,
+  Vcl.Dialogs, Vcl.ComCtrls, Vcl.StdCtrls, Vcl.ExtCtrls;
 
 type
   TForm1 = class(TForm)
     ListView1: TListView;
     Button1: TButton;
     Image1: TImage;
-    Button2: TButton;
     procedure FormCreate(Sender: TObject);
     procedure Button1Click(Sender: TObject);
     procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
@@ -20,6 +19,8 @@ type
     { Private declarations }
     //定义日志字段
     FLog: ILogWriter;
+    //定义游戏业务类的对象
+    GameService: TGameSevice;
   public
     { Public declarations }
     //定义一个属性，属性是为了防止直接访问我们的字段
@@ -32,25 +33,33 @@ var
 implementation
 
 uses
-  UnitService, LoggerPro.VCLListViewAppender;
+  LoggerPro.VCLListViewAppender;
 {$R *.dfm}
 
 procedure TForm1.Button1Click(Sender: TObject);
 begin
 
-  Log.Info('这是一个提示信息', '温馨提示');
+  // 1、TGameService对象创建的问题,注意，原来我们需要传递句柄和展示图片的索引
+  //设置句柄
+  GameService.GameHandle := Image1.Canvas.Handle;
 
+  //绘制背景图
+  GameService.DrawBackGround(Image1.Width, Image1.Height);
+
+  // 2、如何保存num变量的值  ，通过TGameService类中的ImageIndex属性进行保存
+  //重绘
+  Repaint;
+  Log.Info(GameService.ImageIndex.ToString, '温馨提示');
+  //设置背景图的索引
+  GameService.ImageIndex := GameService.ImageIndex + 1;
 end;
 
 //图片绘制测试
-
 procedure TForm1.FormCreate(Sender: TObject);
 begin
   FLog := BuildLogWriter([TVCLListViewAppender.Create(ListView1)]);
-   //绘制背景
-  TGameSevice.Create(Image1.Canvas.Handle).DrawBackground('D:\DelphiSource\2020-01-07-Game\bin\resources\background\bg011.jpg',Image1.Width, Image1.Height);
-
-
+  //初始化游戏业务类的对象
+  GameService := TGameSevice.Create();
 end;
 
 

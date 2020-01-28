@@ -1,0 +1,98 @@
+unit MainFrm;
+
+interface
+
+uses
+  UnitService, LoggerPro, Winapi.Windows, Winapi.Messages, System.SysUtils,
+  System.Variants, System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms,
+  Vcl.Dialogs, Vcl.ComCtrls, Vcl.StdCtrls, Vcl.ExtCtrls;
+
+type
+  TForm1 = class(TForm)
+    ListView1: TListView;
+    Button1: TButton;
+    Image1: TImage;
+    procedure FormCreate(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+    procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+  private
+    { Private declarations }
+    //定义日志字段
+    FLog: ILogWriter;
+    //定义游戏业务类的对象
+    GameService: TGameSevice;
+  public
+    { Public declarations }
+    //定义一个属性，属性是为了防止直接访问我们的字段
+    property Log: ILogWriter read FLog write FLog;
+  end;
+
+var
+  Form1: TForm1;
+
+implementation
+
+uses
+  LoggerPro.VCLListViewAppender;
+{$R *.dfm}
+
+procedure TForm1.Button1Click(Sender: TObject);
+begin
+
+  // 1、TGameService对象创建的问题,注意，原来我们需要传递句柄和展示图片的索引
+  //设置句柄
+  GameService.GameHandle := Image1.Canvas.Handle;
+
+  GameService.DrawBackGround(Image1.Width, Image1.Height);
+
+
+  // 2、如何保存num变量的值  ，通过TGameService类中的ImageIndex属性进行保存
+  //重绘
+  Repaint;
+    //设置背景图的索引
+  GameService.ImageIndex := GameService.ImageIndex + 1;
+end;
+
+//图片绘制测试
+procedure TForm1.FormCreate(Sender: TObject);
+begin
+  FLog := BuildLogWriter([TVCLListViewAppender.Create(ListView1)]);
+  //TGameSevice.Create(Image1.Canvas.Handle).DrawImage('D:\DelphiSource\2020-01-07-Game\bin\resources\background\bg011.jpg', Image1.Width, Image1.Height);
+  //初始化游戏业务类的对象
+  GameService := TGameSevice.Create();
+end;
+
+
+//当事件发生时会将键盘的键码值传到函数内
+procedure TForm1.FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+begin
+
+  case Key of
+    VK_UP:
+      begin
+        Log.Info('上', 'VK_UP');
+      end;
+
+    VK_DOWN:
+      begin
+        Log.Info('下', 'VK_DOWN');
+      end;
+
+    VK_LEFT:
+      begin
+        Log.Info('左', 'VK_LEFT');
+      end;
+    VK_RIGHT:
+      begin
+        Log.Info('右', 'VK_RIGHT');
+      end;
+
+    VK_SPACE:
+      begin
+        Log.Info('空格', 'VK_SPACE');
+      end;
+  end;
+end;
+
+end.
+

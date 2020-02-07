@@ -16,8 +16,20 @@ const
   BACK_GROUND_IMAGE: string = './resources/background';
   //游戏窗口
   GAME_WINDOW: string = './resources/window.png';
+  //方块的原图
+  GAME_ACT_IMAGE: string = './resources/act.jpg';
   //游戏窗口边框的宽度
   GAME_WINDOW_BORDER_WIDTH: Integer = 7;
+  //方块的大小,我们原图中每个方格的宽和高
+  ACT_SIZE: Integer = 32;
+
+  //游戏地图的宽度
+
+  GAME_MAP_WIDTH: Integer = 18;
+
+  //游戏地图的高度
+
+  GAME_MAP_HEIGHT: Integer = 18;
 
 implementation
 

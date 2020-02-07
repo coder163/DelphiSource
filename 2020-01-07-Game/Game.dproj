@@ -108,6 +108,8 @@
         </DCCReference>
         <DCCReference Include="service\UnitService.pas"/>
         <DCCReference Include="const\UnitConst.pas"/>
+        <DCCReference Include="domain\UnitData.pas"/>
+        <DCCReference Include="utils\Unit1Utils.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

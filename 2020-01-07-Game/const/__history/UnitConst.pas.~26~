@@ -1,0 +1,30 @@
+unit UnitConst;
+
+{*------------------------------------------------------------------------------
+  @author  侯叶飞
+  @version 2020/01/28 1.0 Initial revision.
+  @comment  资源常量列表
+
+-------------------------------------------------------------------------------}
+interface
+
+uses
+  System.SysUtils, Vcl.Forms;
+
+const
+  //游戏背景图片存放路径
+  BACK_GROUND_IMAGE: string = './resources/background';
+  //游戏窗口
+  GAME_WINDOW: string = './resources/window.png';
+  //方块的原图
+  GAME_ACT_IMAGE: string = './resources/act.jpg';
+  //游戏窗口边框的宽度
+  GAME_WINDOW_BORDER_WIDTH: Integer = 7;
+  //方块的大小,我们原图中每个方格的宽和高
+  ACT_SIZE: Integer = 32;
+
+
+implementation
+
+end.
+

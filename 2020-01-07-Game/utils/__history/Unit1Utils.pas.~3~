@@ -1,0 +1,14 @@
+unit Unit1Utils;
+
+interface
+
+  type
+
+   TPublicUtil=class
+
+
+
+   end;
+implementation
+
+end.

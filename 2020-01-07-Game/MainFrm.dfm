@@ -3,9 +3,10 @@ object Form1: TForm1
   Top = 0
   BorderIcons = [biSystemMenu, biMinimize]
   Caption = #20420#32599#26031#26041#22359
-  ClientHeight = 654
-  ClientWidth = 873
+  ClientHeight = 666
+  ClientWidth = 875
   Color = clBtnFace
+  DoubleBuffered = True
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
   Font.Height = -11
@@ -22,13 +23,13 @@ object Form1: TForm1
     Left = 0
     Top = 0
     Width = 873
-    Height = 425
+    Height = 473
   end
   object ListView1: TListView
     Left = 0
-    Top = 424
+    Top = 479
     Width = 873
-    Height = 195
+    Height = 186
     Columns = <
       item
         AutoSize = True
@@ -39,22 +40,10 @@ object Form1: TForm1
     TabOrder = 0
     ViewStyle = vsReport
   end
-  object Button1: TButton
-    Left = 0
-    Top = 625
-    Width = 75
-    Height = 25
-    Caption = #26085#24535#27979#35797
-    TabOrder = 1
-    OnClick = Button1Click
-  end
-  object Button2: TButton
-    Left = 168
-    Top = 625
-    Width = 75
-    Height = 25
-    Caption = 'Button2'
-    TabOrder = 2
-    OnClick = Button2Click
+  object Timer1: TTimer
+    Interval = 300
+    OnTimer = Timer1Timer
+    Left = 352
+    Top = 424
   end
 end

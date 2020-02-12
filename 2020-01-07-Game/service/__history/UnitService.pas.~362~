@@ -1,0 +1,379 @@
+unit UnitService;
+{*------------------------------------------------------------------------------
+  @author  侯叶飞
+  @version 2020/01/28 1.0 Initial revision.
+  @comment  游戏的业务控制
+
+   图形移动
+
+   1、获取当前图形的数据(四个小方格的坐标)
+
+   2、改变每个小方格的坐标即可
+
+   3、边界问题
+
+
+   图形旋转(变形)
+
+    1、确定中心点儿
+
+    2、获取图形中每个方格的坐标
+
+
+    图形堆砌
+
+    1、图形到到达边界之后应该停止下落，同时实现重新产生图形
+
+    2、当多个图形到达边界之后我们如何实现已经处于边界的图形(方格)
+
+    3、该功能实现的思路是什么
+
+      a)我们需要在图形到达边界之后进行记录
+
+      b)将每个方格的xy坐标存储到容器，二维数组(宽度，高度作为数组的长度)
+
+      c)二维数组中记录的内容是已经到达边界的图形数据(每个方格的XY坐标)
+-------------------------------------------------------------------------------}
+
+interface
+
+uses
+  UnitData, System.SysUtils, System.Generics.Collections, System.IOUtils,
+  Winapi.Windows, Winapi.GDIPOBJ, Winapi.GDIPAPI;
+
+type
+  TGameSevice = class
+  private
+   //定义属性
+    FHdc: HDC;
+    //表示图片的编号
+    FImageIndex: Integer;
+    //当前的图形
+    FCurrentAct: TList<TPoint>;
+
+    //游戏地图数据存储
+    FGameMap: TGameMap;
+    function IsCanRemove(Y: Integer): Boolean;
+    procedure RemoveLine(RowNum: Integer);
+  public
+    //绘制图片
+    procedure DrawImage(FileName: string; Width, Hegiht: Integer);
+    //绘制背景
+    procedure DrawBackGround(Width, Hegiht: Integer);
+
+    //绘制窗口
+    procedure DrawWindow(x, y, w, h: Integer);
+
+    //绘制方块
+    procedure DrawAct(x, y, ActIndex: Integer);
+    //移动
+    function Move(X, Y: Integer): Boolean;
+    //旋转
+    procedure Rotate();
+
+    //绘制地图
+    procedure DrawGameMap();
+
+    //设置地图数据
+    procedure SetGameMap(X, Y: Integer);
+
+    //构造方法，方法名相同，参数列表不同称为重载
+    constructor Create(hdc: HDC); overload;
+    constructor Create(); overload;
+    //定义字段
+    property GameHandle: HDC read FHdc write FHdc;
+    property ImageIndex: Integer read FImageIndex write FImageIndex;
+
+    //当前图形的属性
+    property CurrentAct: TList<TPoint> read FCurrentAct write FCurrentAct;
+    property GameMap: TGameMap read FGameMap;
+  end;
+
+implementation
+
+uses
+  MainFrm, UnitConst;
+{ TGameSevice }
+
+constructor TGameSevice.Create(hdc: hdc);
+begin
+  GameHandle := hdc;
+end;
+
+constructor TGameSevice.Create;
+begin
+  inherited;
+
+end;
+
+{*------------------------------------------------------------------------------
+  根据指定的编号绘制不同颜色的方块
+
+  @param ActIndex  方块的索引，从0开始
+-------------------------------------------------------------------------------}
+
+procedure TGameSevice.DrawAct(x, y, ActIndex: Integer);
+var
+  //画笔
+  Graphics: TGPGraphics;
+  Image: TGPImage;
+begin
+  //载入我们的图片文件
+  Image := TGPImage.Create(UnitConst.GAME_ACT_IMAGE);
+  //将载入的图片绘制到指定的组件上(TImage)
+  Graphics := TGPGraphics.Create(GameHandle);
+  //绘制图片
+  Graphics.DrawImage(Image, MakeRect(x, y, UnitConst.ACT_SIZE, UnitConst.ACT_SIZE), ActIndex * UnitConst.ACT_SIZE, 0, UnitConst.ACT_SIZE, UnitConst.ACT_SIZE, UnitPixel);
+  Graphics.Free;
+  Image.Free;
+
+end;
+
+procedure TGameSevice.DrawBackGround(Width, Hegiht: Integer);
+var
+  ImageList: TArray<string>;
+begin
+  //获取图片列表
+  ImageList := TDirectory.GetFiles(UnitConst.BACK_GROUND_IMAGE);
+
+  if ImageIndex >= Length(ImageList) then begin
+    ImageIndex := 0;
+  end;
+
+  //选取图片列表中的某一个图片，展示在窗口
+  DrawImage(ImageList[ImageIndex], Width, Hegiht);
+end;
+
+{*------------------------------------------------------------------------------
+  判断是否有可以消除的行
+
+  @param Y   列
+  @return
+-------------------------------------------------------------------------------}
+function TGameSevice.IsCanRemove(Y: Integer): Boolean;
+var
+  X: Integer;
+begin
+   //Ctrl+w         Ctrl+d
+  for X := 0 to UnitConst.GAME_MAP_WIDTH - 1 do begin
+    //主要这一行中有一列是假，那么我们退出函数
+    if not GameMap[X][Y] then begin
+
+      Result := False;
+      Exit;
+    end;
+
+  end;
+
+  //如果能够顺利的到达这个位置，表示全部都是true，该行可以消除
+  Result := True;
+end;
+
+{*------------------------------------------------------------------------------
+  消行
+
+  @param RowNum 行号
+-------------------------------------------------------------------------------}
+procedure TGameSevice.RemoveLine(RowNum: Integer);
+var
+  X, Y: Integer;
+begin
+  for X := 0 to UnitConst.GAME_MAP_WIDTH - 1 do begin
+    for Y := RowNum downto 0 do begin
+      FGameMap[X][Y] := FGameMap[X][Y - 1];
+    end;
+
+  end;
+  FGameMap[X][0] := False;
+end;
+
+{*------------------------------------------------------------------------------
+  绘制游戏地图
+
+-------------------------------------------------------------------------------}
+procedure TGameSevice.DrawGameMap;
+var
+  X, Y: Integer;
+  str: string;
+begin
+
+  str := '';
+
+  for X := Low(GameMap) to High(GameMap) do begin
+
+    if IsCanRemove(X) then begin
+      form1.Log.Info('该行可以消除', X.ToString);
+      RemoveLine(X);
+    end;
+    //绘制地图
+    for Y := Low(GameMap[X]) to High(GameMap[X]) do begin
+      //根据X,Y绘制我们的方格
+      if GameMap[X][Y] then begin
+        DrawAct(X * UnitConst.ACT_SIZE + UnitConst.GAME_WINDOW_BORDER_WIDTH, Y * UnitConst.ACT_SIZE + UnitConst.GAME_WINDOW_BORDER_WIDTH, 0);
+      end;
+      str := str + BoolToStr(GameMap[X][Y]);
+    end;
+
+    str := str + '-----' + X.ToString + #13;
+  end;
+
+  Form1.Label1.Caption := str;
+end;
+
+procedure TGameSevice.DrawImage(FileName: string; Width, Hegiht: Integer);
+var
+  //画笔
+  Graphics: TGPGraphics;
+  Image: TGPImage;
+begin
+  //载入我们的图片文件
+  Image := TGPImage.Create(FileName);
+  //将载入的图片绘制到指定的组件上(TImage)
+  Graphics := TGPGraphics.Create(GameHandle);
+  //绘制图片
+  Graphics.DrawImage(Image, MakeRect(0, 0, Width, Hegiht));
+  Graphics.Free;
+  Image.Free;
+end;
+
+{*------------------------------------------------------------------------------
+  绘制游戏窗口
+
+  @param x 游戏窗口的X坐标
+  @param y 游戏窗口的Y坐标
+  @param w 游戏窗口的宽度
+  @param h 游戏窗口的高度
+-------------------------------------------------------------------------------}
+procedure TGameSevice.DrawWindow(x, y, w, h: Integer);
+var
+  //画笔
+  Graphics: TGPGraphics;
+  img: TGPImage;
+begin
+  //载入我们的图片文件
+  img := TGPImage.Create(UnitConst.GAME_WINDOW);
+  //将载入的图片绘制到指定的组件上(TImage)
+  Graphics := TGPGraphics.Create(GameHandle);
+  //绘制图片
+    // 左上角
+  Graphics.DrawImage(img, MakeRect(x, y, UnitConst.GAME_WINDOW_BORDER_WIDTH, UnitConst.GAME_WINDOW_BORDER_WIDTH), 0, 0, UnitConst.GAME_WINDOW_BORDER_WIDTH, UnitConst.GAME_WINDOW_BORDER_WIDTH, UnitPixel);
+
+    // 左侧竖线
+  Graphics.DrawImage(img, MakeRect(x, y + UnitConst.GAME_WINDOW_BORDER_WIDTH, UnitConst.GAME_WINDOW_BORDER_WIDTH, h - UnitConst.GAME_WINDOW_BORDER_WIDTH), 0, UnitConst.GAME_WINDOW_BORDER_WIDTH, img.GetWidth - (img.GetWidth - UnitConst.GAME_WINDOW_BORDER_WIDTH), img.GetHeight - UnitConst.GAME_WINDOW_BORDER_WIDTH * 2, UnitPixel);
+
+    // 左下角
+  Graphics.DrawImage(img, MakeRect(x, y + h, UnitConst.GAME_WINDOW_BORDER_WIDTH, img.GetHeight), 0, img.GetWidth - UnitConst.GAME_WINDOW_BORDER_WIDTH, UnitConst.GAME_WINDOW_BORDER_WIDTH, img.GetHeight, UnitPixel);
+
+    // 底部中线
+  Graphics.DrawImage(img, MakeRect(x + UnitConst.GAME_WINDOW_BORDER_WIDTH, y + h, w - UnitConst.GAME_WINDOW_BORDER_WIDTH, img.GetHeight), UnitConst.GAME_WINDOW_BORDER_WIDTH, img.GetHeight - UnitConst.GAME_WINDOW_BORDER_WIDTH, img.GetWidth - UnitConst.GAME_WINDOW_BORDER_WIDTH * 2, img.GetHeight, UnitPixel);
+
+    // 右下角
+  Graphics.DrawImage(img, MakeRect(x + w, y + h, img.GetWidth, img.GetHeight), img.GetWidth - UnitConst.GAME_WINDOW_BORDER_WIDTH, img.GetHeight - UnitConst.GAME_WINDOW_BORDER_WIDTH, img.GetWidth, img.GetHeight, UnitPixel);
+    // 右侧竖线
+  Graphics.DrawImage(img, MakeRect(x + w, y + UnitConst.GAME_WINDOW_BORDER_WIDTH, img.GetWidth, h - UnitConst.GAME_WINDOW_BORDER_WIDTH), img.GetWidth - UnitConst.GAME_WINDOW_BORDER_WIDTH, UnitConst.GAME_WINDOW_BORDER_WIDTH, img.GetWidth, img.GetHeight - UnitConst.GAME_WINDOW_BORDER_WIDTH * 2, UnitPixel);
+
+    // 右上角
+  Graphics.DrawImage(img, MakeRect(x + w, y, img.GetHeight, UnitConst.GAME_WINDOW_BORDER_WIDTH), img.GetWidth - UnitConst.GAME_WINDOW_BORDER_WIDTH, 0, img.GetHeight, UnitConst.GAME_WINDOW_BORDER_WIDTH, UnitPixel);
+    // 顶部中线
+  Graphics.DrawImage(img, MakeRect(x + UnitConst.GAME_WINDOW_BORDER_WIDTH, y, w - UnitConst.GAME_WINDOW_BORDER_WIDTH, UnitConst.GAME_WINDOW_BORDER_WIDTH), UnitConst.GAME_WINDOW_BORDER_WIDTH, 0, img.GetWidth - UnitConst.GAME_WINDOW_BORDER_WIDTH * 2, UnitConst.GAME_WINDOW_BORDER_WIDTH, UnitPixel);
+
+    // 中间
+  Graphics.DrawImage(img, MakeRect(x + UnitConst.GAME_WINDOW_BORDER_WIDTH, y + UnitConst.GAME_WINDOW_BORDER_WIDTH, w - UnitConst.GAME_WINDOW_BORDER_WIDTH, h - UnitConst.GAME_WINDOW_BORDER_WIDTH), UnitConst.GAME_WINDOW_BORDER_WIDTH, UnitConst.GAME_WINDOW_BORDER_WIDTH, img.GetWidth - UnitConst.GAME_WINDOW_BORDER_WIDTH * 2, img.GetHeight - UnitConst.GAME_WINDOW_BORDER_WIDTH * 2, UnitPixel);
+  Graphics.Free;
+  img.Free;
+
+end;
+
+
+
+
+
+{*------------------------------------------------------------------------------
+  图形移动
+
+  @param X 目的地的X
+  @param Y 目的地的Y
+  @return   可以继续移动返回true，否则返回false
+-------------------------------------------------------------------------------}
+
+function TGameSevice.Move(X, Y: Integer): Boolean;
+var
+  NewX, NewY, I: Integer;
+begin
+  for I := 0 to CurrentAct.Count - 1 do begin
+
+    //获取当前图形中每个方格的坐标
+
+    NewX := CurrentAct.Items[I].X + X;      //10+ -2
+
+    NewY := CurrentAct.Items[I].Y + Y;
+
+    if (NewY >= UnitConst.GAME_MAP_HEIGHT) or (NewX >= UnitConst.GAME_MAP_WIDTH) or (NewX < 0) or FGameMap[NewX][NewY] then begin
+
+      Result := False;
+      Exit;
+    end;
+
+  end;
+
+  for I := 0 to CurrentAct.Count - 1 do begin
+
+    //获取当前图形中每个方格的坐标
+
+    NewX := CurrentAct.Items[I].X + X;      //10+ -2
+
+    NewY := CurrentAct.Items[I].Y + Y;
+
+    //重新赋值每个方格的xy坐标
+    CurrentAct.Items[I] := TPoint.Create(NewX, NewY);
+
+  end;
+
+  //默认可以移动
+  Result := True;
+end;
+
+
+{*------------------------------------------------------------------------------
+
+  o为中心点、a为当前点、b为目标点
+  a.x=o.y+o.x-b.y
+  a.y=o.y-o.x+b.x
+-------------------------------------------------------------------------------}
+
+procedure TGameSevice.Rotate;
+var
+  NewX, NewY, I: Integer;
+begin
+
+  //边界检测，
+  for I := 1 to CurrentAct.Count - 1 do begin
+      //获取图形中每个方格的坐标，按照公式计算新的坐标点
+    NewX := CurrentAct.Items[0].y + CurrentAct.Items[0].x - CurrentAct.Items[I].y;
+    NewY := CurrentAct.Items[0].y - CurrentAct.Items[0].x + CurrentAct.Items[I].x;
+
+    //如果目标点在边界上或者边界外，则不进行图形变换
+    if (NewY >= UnitConst.GAME_MAP_HEIGHT) or (NewY < 0) or (NewX >= UnitConst.GAME_MAP_WIDTH) or (NewX < 0) or FGameMap[NewX][NewY] then begin
+      Exit;
+    end;
+  end;
+
+  //获取当前图形
+  for I := 1 to CurrentAct.Count - 1 do begin
+      //获取图形中每个方格的坐标，按照公式计算新的坐标点
+    NewX := CurrentAct.Items[0].y + CurrentAct.Items[0].x - CurrentAct.Items[I].y;
+    NewY := CurrentAct.Items[0].y - CurrentAct.Items[0].x + CurrentAct.Items[I].x;
+
+    //将新的坐标设置为当前图形的坐标
+    CurrentAct.Items[I] := TPoint.Create(NewX, NewY);
+  end;
+
+end;
+
+procedure TGameSevice.SetGameMap(X, Y: Integer);
+begin
+  FGameMap[X][Y] := True;
+end;
+
+end.
+

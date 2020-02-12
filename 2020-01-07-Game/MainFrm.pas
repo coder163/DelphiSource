@@ -3,15 +3,16 @@ unit MainFrm;
 interface
 
 uses
-  UnitService, LoggerPro, Winapi.Windows, Winapi.Messages, System.SysUtils,
-  System.Variants, System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms,
-  Vcl.Dialogs, Vcl.ComCtrls, Vcl.StdCtrls, Vcl.ExtCtrls;
+  UnitData, UnitService, LoggerPro, Winapi.Windows, Winapi.Messages,
+  System.SysUtils, System.Variants, System.Classes, Vcl.Graphics, Vcl.Controls,
+  Vcl.Forms, Vcl.Dialogs, Vcl.ComCtrls, Vcl.StdCtrls, Vcl.ExtCtrls;
 
 type
   TForm1 = class(TForm)
     ListView1: TListView;
     Image1: TImage;
     Timer1: TTimer;
+    Label1: TLabel;
     procedure FormCreate(Sender: TObject);
     procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure Timer1Timer(Sender: TObject);
@@ -21,6 +22,7 @@ type
     FLog: ILogWriter;
     //定义游戏业务类的对象
     GameService: TGameSevice;
+    GameMap: TGameMap;
   public
     { Public declarations }
     //定义一个属性，属性是为了防止直接访问我们的字段
@@ -36,7 +38,7 @@ var
 implementation
 
 uses
-  Unit1Utils, UnitConst, System.Generics.Collections, UnitData,
+  Unit1Utils, UnitConst, System.Generics.Collections,
   LoggerPro.VCLListViewAppender;
 {$R *.dfm}
 
@@ -47,15 +49,20 @@ uses
 procedure TForm1.FormCreate(Sender: TObject);
 var
   RandomIndex: Integer;
+var
+  MapWidth, MapHeight, I: Integer;
+  IsMove: Boolean;
+  ActPoint: TPoint;
 begin
   FLog := BuildLogWriter([TVCLListViewAppender.Create(ListView1)]);
   //初始化游戏业务类的对象
   GameService := TGameSevice.Create();
 
   //创建GameService对象时初始化图形
-  RandomIndex := TPublicUtil.GetNumberWithRound(0, 6);
+  RandomIndex := TPublicUtil.GetNumberWithRound(0, 7);
 
-  GameService.CurrentAct := TGameData.GetActByIndex(RandomIndex);
+  GameService.CurrentAct := TGameData.Create().GetActByIndex(RandomIndex);
+
   InitGame;
 end;
 
@@ -67,31 +74,36 @@ begin
   case Key of
     VK_UP:
       begin
-        GameService.Revolve();
-        Log.Info('上', 'VK_UP');
+        GameService.Rotate();
+//        Log.Info('上', 'VK_UP');
       end;
 
     VK_DOWN:
       begin
         GameService.Move(0, 1);
-        Log.Info('下', 'VK_DOWN');
+//        Log.Info('下', 'VK_DOWN');
       end;
 
     VK_LEFT:
       begin
         GameService.Move(-1, 0);
-        Log.Info('左', 'VK_LEFT');
+//        Log.Info('左', 'VK_LEFT');
       end;
     VK_RIGHT:
       begin
         GameService.Move(1, 0);
-        Log.Info('右', 'VK_RIGHT');
+//        Log.Info('右', 'VK_RIGHT');
       end;
 
     VK_SPACE:
       begin
+        if Timer1.Interval > 0 then begin
+          Timer1.Interval := 0;
+        end
+        else begin
+          Timer1.Interval := 300;
+        end;
 
-        Log.Info('空格', 'VK_SPACE');
       end;
   end;
 end;
@@ -114,28 +126,45 @@ begin
 
   //绘制图形预览窗口
   GameService.DrawWindow(MapWidth + 100, 0, 32 * 12, 32 * 8);
-
-
   //绘制图形
   for I := 0 to GameService.CurrentAct.Count - 1 do begin
 
     GameService.DrawAct(7 + GameService.CurrentAct.Items[I].X * 32, 7 + GameService.CurrentAct.Items[I].Y * 32, 1);
   end;
 
-//  GameService.Move(0, 1);
-
-  //TODO 还有其他需要初始化显示的内容
 end;
 
 procedure TForm1.Timer1Timer(Sender: TObject);
+var
+  IsMove: Boolean;
+  ActPoint: TPoint;
+  I: Integer;
 begin
 
   InitGame;
+  IsMove := GameService.Move(0, 1);
+
+  //IsMove = False
+  if not IsMove then begin
+
+//    遍历我们当前已经到达边界的图形，以图形中每个方格的xy坐标作为二维数组的索引值
+    for I := 0 to GameService.CurrentAct.Count - 1 do begin
+      //获取图形中每个方格的坐标
+      ActPoint := GameService.CurrentAct.Items[I];
+
+      //设置地图的xy索引值
+      GameService.SetGameMap(ActPoint.x, ActPoint.y);
+    end;
+
+
+    //重新产生图形
+    GameService.CurrentAct := TGameData.Create().GetActByIndex(TPublicUtil.GetNumberWithRound(0, 7));
+  end;
+  GameService.DrawGameMap;
 
   //重绘
   Repaint;
 
-//  Log.Info(TPublicUtil.GetNumberWithRound(3, 6).ToString, '随机数');
 end;
 
 end.

@@ -27,18 +27,26 @@ uses
 
 type
   TGameData = class
+  private
+    ActList: TList<TList<TPoint>>;  //图形列表
+
+    Points: Tlist<Tpoint>;   //我们每一种图形的数据
   public
 
     //该函数因为是类函数，所以不需要通过该类对象进行调用
-    class function GetActByIndex(ActIndex: Integer): TList<TPoint>;
+    function GetActByIndex(ActIndex: Integer): TList<TPoint>;
+    constructor Create(); overload;
   end;
+
+type
+  //该数据类型表示存储已经到达边界的方格的地图数据
+  TGameMap = array[0..17] of array[0..17] of Boolean;
 
 implementation
 
-var
-  ActList: TList<TList<TPoint>>;  //图形列表
 
-  Points: Tlist<Tpoint>;   //我们每一种图形的数据
+
+
 
 { TGameData }
 
@@ -49,13 +57,8 @@ var
   @return  指定的图形数据
 -------------------------------------------------------------------------------}
 
-class function TGameData.GetActByIndex(ActIndex: Integer): TList<TPoint>;
+constructor TGameData.Create;
 begin
-
-  Result := ActList.Items[ActIndex];
-end;
-
-initialization
   //创建列表对象
   ActList := TList<TList<TPoint>>.Create;
   //创建图形数据
@@ -109,6 +112,16 @@ initialization
   Points.Add(TPoint.Create(6, 1));
   Points.Add(TPoint.Create(7, 1));
   ActList.Add(Points);
+end;
+
+function TGameData.GetActByIndex(ActIndex: Integer): TList<TPoint>;
+begin
+
+  Result := ActList.Items[ActIndex];
+end;
+
+initialization
+
 
 end.
 

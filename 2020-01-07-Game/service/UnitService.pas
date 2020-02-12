@@ -13,29 +13,33 @@ unit UnitService;
    3、边界问题
 
 
-  笛卡尔积坐标系90度旋转公式
+   图形旋转(变形)
 
-  o为中心点、a为当前点、b为目标点
+    1、确定中心点儿
 
-  注意：笛卡尔积坐标系和屏幕坐标系正好相反
+    2、获取图形中每个方格的坐标
 
-  顺时针：
 
-  b.x=o.x-o.y+a.y
+    图形堆砌
 
-  b.y=o.x+o.y-a.x
+    1、图形到到达边界之后应该停止下落，同时实现重新产生图形
 
-  逆时针
+    2、当多个图形到达边界之后我们如何实现已经处于边界的图形(方格)
 
-  a.x=o.y+o.x-b.y
-  a.y=o.y-o.x+b.x
+    3、该功能实现的思路是什么
+
+      a)我们需要在图形到达边界之后进行记录
+
+      b)将每个方格的xy坐标存储到容器，二维数组(宽度，高度作为数组的长度)
+
+      c)二维数组中记录的内容是已经到达边界的图形数据(每个方格的XY坐标)
 -------------------------------------------------------------------------------}
 
 interface
 
 uses
-  System.SysUtils, System.Generics.Collections, System.IOUtils, Winapi.Windows,
-  Winapi.GDIPOBJ, Winapi.GDIPAPI;
+  UnitData, System.SysUtils, System.Generics.Collections, System.IOUtils,
+  Winapi.Windows, Winapi.GDIPOBJ, Winapi.GDIPAPI;
 
 type
   TGameSevice = class
@@ -46,6 +50,11 @@ type
     FImageIndex: Integer;
     //当前的图形
     FCurrentAct: TList<TPoint>;
+
+    //游戏地图数据存储
+    FGameMap: TGameMap;
+    function IsCanRemove(Y: Integer): Boolean;
+    procedure RemoveLine(RowNum: Integer);
   public
     //绘制图片
     procedure DrawImage(FileName: string; Width, Hegiht: Integer);
@@ -57,12 +66,16 @@ type
 
     //绘制方块
     procedure DrawAct(x, y, ActIndex: Integer);
-
-
     //移动
     function Move(X, Y: Integer): Boolean;
+    //旋转
+    procedure Rotate();
 
+    //绘制地图
+    procedure DrawGameMap();
 
+    //设置地图数据
+    procedure SetGameMap(X, Y: Integer);
 
     //构造方法，方法名相同，参数列表不同称为重载
     constructor Create(hdc: HDC); overload;
@@ -73,6 +86,7 @@ type
 
     //当前图形的属性
     property CurrentAct: TList<TPoint> read FCurrentAct write FCurrentAct;
+    property GameMap: TGameMap read FGameMap;
   end;
 
 implementation
@@ -89,6 +103,7 @@ end;
 constructor TGameSevice.Create;
 begin
   inherited;
+
 end;
 
 {*------------------------------------------------------------------------------
@@ -127,6 +142,82 @@ begin
 
   //选取图片列表中的某一个图片，展示在窗口
   DrawImage(ImageList[ImageIndex], Width, Hegiht);
+end;
+
+{*------------------------------------------------------------------------------
+  判断是否有可以消除的行
+
+  @param Y   列
+  @return
+-------------------------------------------------------------------------------}
+function TGameSevice.IsCanRemove(Y: Integer): Boolean;
+var
+  X: Integer;
+begin
+   //Ctrl+w         Ctrl+d
+  for X := 0 to UnitConst.GAME_MAP_WIDTH - 1 do begin
+    //主要这一行中有一列是假，那么我们退出函数
+    if not GameMap[X][Y] then begin
+
+      Result := False;
+      Exit;
+    end;
+
+  end;
+
+  //如果能够顺利的到达这个位置，表示全部都是true，该行可以消除
+  Result := True;
+end;
+
+{*------------------------------------------------------------------------------
+  消行
+
+  @param RowNum 行号
+-------------------------------------------------------------------------------}
+procedure TGameSevice.RemoveLine(RowNum: Integer);
+var
+  X, Y: Integer;
+begin
+  for X := 0 to UnitConst.GAME_MAP_WIDTH - 1 do begin
+    for Y := RowNum downto 0 do begin
+      FGameMap[X][Y] := FGameMap[X][Y - 1];
+    end;
+    FGameMap[X][0] := False;
+  end;
+
+end;
+
+{*------------------------------------------------------------------------------
+  绘制游戏地图
+
+-------------------------------------------------------------------------------}
+procedure TGameSevice.DrawGameMap;
+var
+  X, Y: Integer;
+  str: string;
+begin
+
+  str := '';
+
+  for X := Low(GameMap) to High(GameMap) do begin
+
+    if IsCanRemove(X) then begin
+      form1.Log.Info('该行可以消除', X.ToString);
+      RemoveLine(X);
+    end;
+    //绘制地图
+    for Y := Low(GameMap[X]) to High(GameMap[X]) do begin
+      //根据X,Y绘制我们的方格
+      if GameMap[X][Y] then begin
+        DrawAct(X * UnitConst.ACT_SIZE + UnitConst.GAME_WINDOW_BORDER_WIDTH, Y * UnitConst.ACT_SIZE + UnitConst.GAME_WINDOW_BORDER_WIDTH, 0);
+      end;
+      str := str + BoolToStr(GameMap[X][Y]);
+    end;
+
+    str := str + '-----' + X.ToString + #13;
+  end;
+
+  Form1.Label1.Caption := str;
 end;
 
 procedure TGameSevice.DrawImage(FileName: string; Width, Hegiht: Integer);
@@ -193,6 +284,10 @@ begin
 
 end;
 
+
+
+
+
 {*------------------------------------------------------------------------------
   图形移动
 
@@ -213,7 +308,7 @@ begin
 
     NewY := CurrentAct.Items[I].Y + Y;
 
-    if (NewY >= UnitConst.GAME_MAP_HEIGHT) or (NewX >= UnitConst.GAME_MAP_WIDTH) or (NewX < 0) then begin
+    if (NewY >= UnitConst.GAME_MAP_HEIGHT) or (NewX >= UnitConst.GAME_MAP_WIDTH) or (NewX < 0) or FGameMap[NewX][NewY] then begin
 
       Result := False;
       Exit;
@@ -238,6 +333,47 @@ begin
   Result := True;
 end;
 
+
+{*------------------------------------------------------------------------------
+
+  o为中心点、a为当前点、b为目标点
+  a.x=o.y+o.x-b.y
+  a.y=o.y-o.x+b.x
+-------------------------------------------------------------------------------}
+
+procedure TGameSevice.Rotate;
+var
+  NewX, NewY, I: Integer;
+begin
+
+  //边界检测，
+  for I := 1 to CurrentAct.Count - 1 do begin
+      //获取图形中每个方格的坐标，按照公式计算新的坐标点
+    NewX := CurrentAct.Items[0].y + CurrentAct.Items[0].x - CurrentAct.Items[I].y;
+    NewY := CurrentAct.Items[0].y - CurrentAct.Items[0].x + CurrentAct.Items[I].x;
+
+    //如果目标点在边界上或者边界外，则不进行图形变换
+    if (NewY >= UnitConst.GAME_MAP_HEIGHT) or (NewY < 0) or (NewX >= UnitConst.GAME_MAP_WIDTH) or (NewX < 0) or FGameMap[NewX][NewY] then begin
+      Exit;
+    end;
+  end;
+
+  //获取当前图形
+  for I := 1 to CurrentAct.Count - 1 do begin
+      //获取图形中每个方格的坐标，按照公式计算新的坐标点
+    NewX := CurrentAct.Items[0].y + CurrentAct.Items[0].x - CurrentAct.Items[I].y;
+    NewY := CurrentAct.Items[0].y - CurrentAct.Items[0].x + CurrentAct.Items[I].x;
+
+    //将新的坐标设置为当前图形的坐标
+    CurrentAct.Items[I] := TPoint.Create(NewX, NewY);
+  end;
+
+end;
+
+procedure TGameSevice.SetGameMap(X, Y: Integer);
+begin
+  FGameMap[X][Y] := True;
+end;
 
 end.
 

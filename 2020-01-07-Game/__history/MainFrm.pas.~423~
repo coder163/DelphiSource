@@ -12,7 +12,6 @@ type
     ListView1: TListView;
     Image1: TImage;
     Timer1: TTimer;
-    Label1: TLabel;
     procedure FormCreate(Sender: TObject);
     procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure Timer1Timer(Sender: TObject);
@@ -60,7 +59,7 @@ begin
 
   //创建GameService对象时初始化图形
   RandomIndex := TPublicUtil.GetNumberWithRound(0, 7);
-
+  GameService.DrawImage(0, 0, './resources' + RandomIndex.ToString + '.png', 0, 0);
   GameService.CurrentAct := TGameData.Create().GetActByIndex(RandomIndex);
 
   InitGame;
@@ -97,8 +96,13 @@ begin
 
     VK_SPACE:
       begin
-        Timer1.Interval := 0;
-//        Log.Info('空格', 'VK_SPACE');
+        if Timer1.Interval > 0 then begin
+          Timer1.Interval := 0;
+        end
+        else begin
+          Timer1.Interval := 300;
+        end;
+
       end;
   end;
 end;
@@ -127,8 +131,6 @@ begin
     GameService.DrawAct(7 + GameService.CurrentAct.Items[I].X * 32, 7 + GameService.CurrentAct.Items[I].Y * 32, 1);
   end;
 
-
-
 end;
 
 procedure TForm1.Timer1Timer(Sender: TObject);
@@ -139,6 +141,7 @@ var
 begin
 
   InitGame;
+
   IsMove := GameService.Move(0, 1);
 
   //IsMove = False

@@ -96,8 +96,13 @@ begin
 
     VK_SPACE:
       begin
-        Timer1.Interval := 0;
-//        Log.Info('空格', 'VK_SPACE');
+        if Timer1.Interval > 0 then begin
+          Timer1.Interval := 0;
+        end
+        else begin
+          Timer1.Interval := 300;
+        end;
+
       end;
   end;
 end;
@@ -125,19 +130,20 @@ begin
 
     GameService.DrawAct(7 + GameService.CurrentAct.Items[I].X * 32, 7 + GameService.CurrentAct.Items[I].Y * 32, 1);
   end;
-  IsMove := GameService.Move(0, 1);
 
-
-  //TODO 还有其他需要初始化显示的内容
 end;
 
 procedure TForm1.Timer1Timer(Sender: TObject);
 var
   IsMove: Boolean;
   ActPoint: TPoint;
+  I: Integer;
 begin
 
   InitGame;
+
+  IsMove := GameService.Move(0, 1);
+
   //IsMove = False
   if not IsMove then begin
 

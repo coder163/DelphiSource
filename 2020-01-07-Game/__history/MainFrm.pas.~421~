@@ -96,8 +96,13 @@ begin
 
     VK_SPACE:
       begin
-        Timer1.Interval := 0;
-//        Log.Info('空格', 'VK_SPACE');
+        if Timer1.Interval > 0 then begin
+          Timer1.Interval := 0;
+        end
+        else begin
+          Timer1.Interval := 300;
+        end;
+
       end;
   end;
 end;
@@ -106,7 +111,7 @@ procedure TForm1.InitGame;
 var
   MapWidth, MapHeight, I: Integer;
 begin
-    //设置句柄
+  //设置句柄
   GameService.GameHandle := Image1.Canvas.Handle;
   //绘制背景图
   GameService.DrawBackGround(Image1.Width, Image1.Height);
@@ -118,17 +123,20 @@ begin
 
   GameService.DrawWindow(0, 0, MapWidth, MapHeight);
 
+
   //绘制图形预览窗口
   GameService.DrawWindow(MapWidth + 100, 0, 32 * 12, 32 * 8);
+  //绘制预览图形
+
+  GameService.DrawImage(MapWidth + 100 + 96, 64, './resources/' + GameService.ImageIndex.ToString + '.png', 0, 0);
+
+
   //绘制图形
   for I := 0 to GameService.CurrentAct.Count - 1 do begin
 
     GameService.DrawAct(7 + GameService.CurrentAct.Items[I].X * 32, 7 + GameService.CurrentAct.Items[I].Y * 32, 1);
   end;
-  IsMove := GameService.Move(0, 1);
 
-
-  //TODO 还有其他需要初始化显示的内容
 end;
 
 procedure TForm1.Timer1Timer(Sender: TObject);
@@ -139,7 +147,9 @@ var
 begin
 
   InitGame;
-  //IsMove = False
+
+  IsMove := GameService.Move(0, 1);
+
   if not IsMove then begin
 
 //    遍历我们当前已经到达边界的图形，以图形中每个方格的xy坐标作为二维数组的索引值
@@ -151,10 +161,13 @@ begin
       GameService.SetGameMap(ActPoint.x, ActPoint.y);
     end;
 
-
+    GameService.ImageIndex := TPublicUtil.GetNumberWithRound(0, 7);
     //重新产生图形
-    GameService.CurrentAct := TGameData.Create().GetActByIndex(TPublicUtil.GetNumberWithRound(0, 7));
+    GameService.CurrentAct := TGameData.Create().GetActByIndex(GameService.ImageIndex);
+
   end;
+  //绘制预览图形
+  //GameService.DrawImage(683 + 96, 64, './resources/' + GameService.ImageIndex.ToString + '.png', 0, 0);
   GameService.DrawGameMap;
 
   //重绘

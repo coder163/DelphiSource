@@ -12,7 +12,6 @@ type
     ListView1: TListView;
     Image1: TImage;
     Timer1: TTimer;
-    Label1: TLabel;
     procedure FormCreate(Sender: TObject);
     procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure Timer1Timer(Sender: TObject);
@@ -35,6 +34,9 @@ type
 var
   Form1: TForm1;
 
+var
+  RandomIndex: Integer;
+
 implementation
 
 uses
@@ -47,8 +49,6 @@ uses
 //图片绘制测试
 
 procedure TForm1.FormCreate(Sender: TObject);
-var
-  RandomIndex: Integer;
 var
   MapWidth, MapHeight, I: Integer;
   IsMove: Boolean;
@@ -126,6 +126,9 @@ begin
 
   //绘制图形预览窗口
   GameService.DrawWindow(MapWidth + 100, 0, 32 * 12, 32 * 8);
+  //绘制预览图形
+  GameService.DrawImage(MapWidth + 210, 64, './resources/' + RandomIndex.ToString + '.png', 0, 0);
+
   //绘制图形
   for I := 0 to GameService.CurrentAct.Count - 1 do begin
 
@@ -142,6 +145,7 @@ var
 begin
 
   InitGame;
+
   IsMove := GameService.Move(0, 1);
 
   //IsMove = False
@@ -156,9 +160,9 @@ begin
       GameService.SetGameMap(ActPoint.x, ActPoint.y);
     end;
 
-
+    RandomIndex := TPublicUtil.GetNumberWithRound(0, 7);
     //重新产生图形
-    GameService.CurrentAct := TGameData.Create().GetActByIndex(TPublicUtil.GetNumberWithRound(0, 7));
+    GameService.CurrentAct := TGameData.Create().GetActByIndex(RandomIndex);
   end;
   GameService.DrawGameMap;
 

@@ -34,6 +34,9 @@ type
 var
   Form1: TForm1;
 
+var
+  RandomIndex: Integer;
+
 implementation
 
 uses
@@ -46,8 +49,6 @@ uses
 //图片绘制测试
 
 procedure TForm1.FormCreate(Sender: TObject);
-var
-  RandomIndex: Integer;
 var
   MapWidth, MapHeight, I: Integer;
   IsMove: Boolean;
@@ -96,8 +97,13 @@ begin
 
     VK_SPACE:
       begin
-        Timer1.Interval := 0;
-//        Log.Info('空格', 'VK_SPACE');
+        if Timer1.Interval > 0 then begin
+          Timer1.Interval := 0;
+        end
+        else begin
+          Timer1.Interval := 300;
+        end;
+
       end;
   end;
 end;
@@ -105,9 +111,6 @@ end;
 procedure TForm1.InitGame;
 var
   MapWidth, MapHeight, I: Integer;
-var
-  IsMove: Boolean;
-  ActPoint: TPoint;
 begin
     //设置句柄
   GameService.GameHandle := Image1.Canvas.Handle;
@@ -123,21 +126,28 @@ begin
 
   //绘制图形预览窗口
   GameService.DrawWindow(MapWidth + 100, 0, 32 * 12, 32 * 8);
+  //绘制预览图形
+  GameService.DrawImage(MapWidth + 210, 64, './resources/' + RandomIndex.ToString + '.png', 0, 0);
+
   //绘制图形
   for I := 0 to GameService.CurrentAct.Count - 1 do begin
 
     GameService.DrawAct(7 + GameService.CurrentAct.Items[I].X * 32, 7 + GameService.CurrentAct.Items[I].Y * 32, 1);
   end;
-  IsMove := GameService.Move(0, 1);
 
-
-  //TODO 还有其他需要初始化显示的内容
 end;
 
 procedure TForm1.Timer1Timer(Sender: TObject);
+var
+  IsMove: Boolean;
+  ActPoint: TPoint;
+  I: Integer;
 begin
 
   InitGame;
+
+  IsMove := GameService.Move(0, 1);
+
   //IsMove = False
   if not IsMove then begin
 

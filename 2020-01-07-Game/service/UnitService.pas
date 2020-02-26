@@ -57,7 +57,7 @@ type
     procedure RemoveLine(RowNum: Integer);
   public
     //绘制图片
-    procedure DrawImage(FileName: string; Width, Hegiht: Integer);
+    procedure DrawImage(x, y: Integer; FileName: string; Width, Hegiht: Integer);
     //绘制背景
     procedure DrawBackGround(Width, Hegiht: Integer);
 
@@ -141,7 +141,7 @@ begin
   end;
 
   //选取图片列表中的某一个图片，展示在窗口
-  DrawImage(ImageList[ImageIndex], Width, Hegiht);
+  DrawImage(0, 0, ImageList[ImageIndex], Width, Hegiht);
 end;
 
 {*------------------------------------------------------------------------------
@@ -194,10 +194,7 @@ end;
 procedure TGameSevice.DrawGameMap;
 var
   X, Y: Integer;
-  str: string;
 begin
-
-  str := '';
 
   for X := Low(GameMap) to High(GameMap) do begin
 
@@ -211,27 +208,33 @@ begin
       if GameMap[X][Y] then begin
         DrawAct(X * UnitConst.ACT_SIZE + UnitConst.GAME_WINDOW_BORDER_WIDTH, Y * UnitConst.ACT_SIZE + UnitConst.GAME_WINDOW_BORDER_WIDTH, 0);
       end;
-      str := str + BoolToStr(GameMap[X][Y]);
+
     end;
 
-    str := str + '-----' + X.ToString + #13;
   end;
 
-  Form1.Label1.Caption := str;
 end;
 
-procedure TGameSevice.DrawImage(FileName: string; Width, Hegiht: Integer);
+procedure TGameSevice.DrawImage(x, y: Integer; FileName: string; Width, Hegiht: Integer);
 var
   //画笔
   Graphics: TGPGraphics;
   Image: TGPImage;
 begin
+
+
   //载入我们的图片文件
   Image := TGPImage.Create(FileName);
+  if (Width <= 0) or (Hegiht <= 0) then begin
+    Width := Image.GetWidth;
+    Hegiht := Image.GetHeight;
+  end;
+
   //将载入的图片绘制到指定的组件上(TImage)
   Graphics := TGPGraphics.Create(GameHandle);
+
   //绘制图片
-  Graphics.DrawImage(Image, MakeRect(0, 0, Width, Hegiht));
+  Graphics.DrawImage(Image, MakeRect(x, y, Width, Hegiht));
   Graphics.Free;
   Image.Free;
 end;
